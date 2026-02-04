@@ -1,0 +1,94 @@
+import json
+import os
+#Created file json as a database for books collected from the user adding them.
+class Book:
+    def __init__(self, title, author, year):
+        self.title = title
+        self.author = author
+        self.year = year
+#Defines qualities of book. 
+    def to_dict(self):
+        return {"title": self.title, "author": self.author, "year": self.year}
+
+    def __str__(self):
+        return f"'{self.title}' by {self.author} ({self.year})"
+
+class LibraryManager:
+    def __init__(self, filename="library_data.json"):
+        self.filename = filename
+        self.books = {}  # Dictionary: key=title, value=Book object
+        self.load_data()
+
+    def add_book(self, title, author, year):
+        if title in self.books:
+            print(f"Warning: '{title}' already exists.")
+        else:
+            print(f"Updating existing entry for '{title}'.")
+            return
+        self.books[title] = Book(title, author, year)
+        self.save_data()
+        print(f"Book '{title}' added successfully.")
+#Allows the user the function to add a book by typing it's title, author, and year.
+    def remove_book(self, title):
+        if title in self.books:
+            del self.books[title]
+            self.save_data()
+            print(f"Book '{title}' removed.")
+        else:
+            print("Book not found.")
+#Allows user to remove book only by title, unless the book doesn't exist, then "Book not found." pops up.
+    def search_book(self, title):
+        # Case-insensitive search using dict lookup
+        found = [book for t, book in self.books.items() if title.lower() in t.lower()]
+        return found
+#Allows the user to find the book based on its title.
+    def view_all(self):
+        if not self.books:
+            print("Library is empty.")
+        for book in self.books.values():
+            print(book)
+#Allows the user to see all the books in the library.
+    def save_data(self):
+        with open(self.filename, "w") as f:
+            data = {title: book.to_dict() for title, book in self.books.items()}
+            json.dump(data, f, indent=4)
+
+    def load_data(self):
+        if not os.path.exists(self.filename):
+            return
+        with open(self.filename, "r") as f:
+            try:
+                data = json.load(f)
+                self.books = {title: Book(b['title'], b['author'], b['year']) for title, b in data.items()}
+            except json.JSONDecodeError:
+                self.books = {}
+
+def main():
+    library = LibraryManager()
+    while True:
+        print("\n--- Personal Library Manager ---")
+        print("1. Add Book\n2. View All Books\n3. Search Book\n4. Remove Book\n5. Exit")
+        choice = input("Select an option: ")
+#When code runs, this prompt pops up to give the user options to do in the LibraryManager.
+        if choice == '1':
+            title = input("Title: ")
+            author = input("Author: ")
+            year = input("Year: ")
+            library.add_book(title, author, year)
+        elif choice == '2':
+            library.view_all()
+        elif choice == '3':
+            query = input("Search by title: ")
+            results = library.search_book(query)
+            for b in results: print(b)
+        elif choice == '4':
+            title = input("Title to remove: ")
+            library.remove_book(title)
+        elif choice == '5':
+            break
+        else:
+            print("Invalid choice.")
+
+if __name__ == "__main__":
+    main()
+    

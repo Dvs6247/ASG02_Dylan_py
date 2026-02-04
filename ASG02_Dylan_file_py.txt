@@ -1,12 +1,12 @@
 import json
 import os
-
+#Created file json as a database for books collected from the user adding them.
 class Book:
     def __init__(self, title, author, year):
         self.title = title
         self.author = author
         self.year = year
-#Defines qualities of book 
+#Defines qualities of book. 
     def to_dict(self):
         return {"title": self.title, "author": self.author, "year": self.year}
 

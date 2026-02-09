@@ -1,6 +1,11 @@
 {
     "Captain Underpants": {
         "title": "Captain Underpants",
+        "author": "Dav Pilkey",
+        "year": "2000"
+    },
+    "Diary of a Wimpy Kid": {
+        "title": "Diary of a Wimpy Kid",
         "author": "Jeff Kinney",
         "year": "2000"
     }

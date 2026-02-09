@@ -23,12 +23,11 @@ class LibraryManager:
         if title in self.books:
             print(f"Warning: '{title}' already exists.")
         else:
-            print(f"Updating existing entry for '{title}'.")
-            return
+            print(f"Book '{title}' added successfully.")
         self.books[title] = Book(title, author, year)
         self.save_data()
-        print(f"Book '{title}' added successfully.")
-#Allows the user the function to add a book by typing it's title, author, and year.
+        return
+#Allows the user the function to add a book by typing it's title, author, and year, but can be stopped if the title already exists.
     def remove_book(self, title):
         if title in self.books:
             del self.books[title]
@@ -69,7 +68,6 @@ def main():
         print("\n--- Personal Library Manager ---")
         print("1. Add Book\n2. View All Books\n3. Search Book\n4. Remove Book\n5. Exit")
         choice = input("Select an option: ")
-#When code runs, this prompt pops up to give the user options to do in the LibraryManager.
         if choice == '1':
             title = input("Title: ")
             author = input("Author: ")
@@ -85,6 +83,7 @@ def main():
             title = input("Title to remove: ")
             library.remove_book(title)
         elif choice == '5':
+            print("Good Day!")
             break
         else:
             print("Invalid choice.")

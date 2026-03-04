@@ -1,6 +1,6 @@
 class Manufacturer:
     '''
-    Docstring for Manufacturer 
+    Represents a vehicle manufacturer.
     '''
 
     #constructor
@@ -11,11 +11,12 @@ class Manufacturer:
     #properties
     @property
     def get_name(self) -> str:
-        return self.__name 
+        return self._name 
     
-    #properties
     @property
     def get_country(self) -> str:
-        return self.__country
+        return self._country
     
+    def __str__(self) -> str:
+        return f"{self._name}, {self._country}"
     

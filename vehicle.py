@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-# from
+from functools import total_ordering 
 
 from manufacturer import Manufacturer
+#from
 
 class Vehicle(ABC):
     '''
@@ -26,11 +27,28 @@ class Vehicle(ABC):
         return self._model
     
     @property
-    def mpg(self) = float:
+    def mpg(self) -> float:
         return self.mpg
     
+    @property
+    def release_year(self) -> int:
+
     #---------concrete method--------------
+class Vehicle(ABC):
     def how_far_with(self,
                      num_of_gallons: int) -> float
+        return self.mpg
     
-    def number_of_wheels:
+    #----------abstract method------------
+    def number_of_wheels(self): -> int:
+        
+
+# ---- comparison crtieria ------
+def __eq__(self, other) -> bool:
+    return self.release_year == other.release_year
+
+def __it__(self, other) -> bool:
+    pass
+
+def __hash__(self) -> int:
+    pass

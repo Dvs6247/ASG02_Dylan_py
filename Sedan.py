@@ -24,3 +24,4 @@ class Sedan(Vehicle):
             return (
                 f"({self._manufacturer}) {self._model}, mpg: {self._mpg}"
             )
+        

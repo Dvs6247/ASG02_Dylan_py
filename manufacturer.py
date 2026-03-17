@@ -4,9 +4,9 @@ class Manufacturer:
     '''
 
     #constructor
-    def __init__(self.name: str, country: str):
-    self._name = name
-    self._country = country
+    def __init__(self, name: str, country: str):
+        self._name = name
+        self._country = country
     
     #properties
     @property

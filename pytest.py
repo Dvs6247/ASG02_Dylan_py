@@ -67,4 +67,27 @@ class TestAutoModel:
         returned.append(2002)
         assert len(am.years) == 2
 
-        
+class TestVehicleAbstract:
+    #Created the full test class for the VehicleAbstract
+    def test_vehicle_cannot_be_instantiated(self):
+        '''Vehicle is abstract and should not be directly instantiated'''
+        with pytest.raises(TypeError):
+            Vehicle(
+                Manufacturer("X", "Y"),
+                AutoModel("Z", True, [2020]),
+                25.0,
+            )
+
+    def test_subclass_must_implement_number_of_wheels(self):
+        """A subclass that does NOT implement number_of_wheels"""
+        with ytest.raises(typeError):
+
+            class Incomplete(Vehicle):
+                pass
+
+            Incomplete(
+                Manufacturer("X", "Y"),
+                AutoModel("Z", True, [2020]),
+                25.0
+            )
+

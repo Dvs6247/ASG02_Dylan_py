@@ -355,9 +355,61 @@ class TestGarage:
         assert "M3 Limited" in s
         assert "Tundra" in s
 
-    def test_str_vehicles_on_separate_lines(self, full_garage)
+    def test_str_vehicles_on_separate_lines(self, full_garage):
         s = str(full_garage)
         lines = s.strip().split("\n")
         assert len(lines) == 4
 
+class TestIntegration:
+#Created the full test class for Integration
+    def test_full_workflow(self):
+        """
+        Mirrors the tester.py scenario end-to-end.
+        """
+        ford = Manufacturer("Ford", "USA")
+        honda = Manufacturer("Honda", "Japan")
+        bmw = Manufacturer("BMW", "Germany")
+        toyota = Manufacturer("Toyota", "Japan")
+
+        f150 = Truck(ford, AutoModel("F150", True, [2020, 2021])),
+        civic = Sedan(honda, AutoModel("Civic", False, [1996, 1997])),
+        m3 = Sedan(bmw, AutoModel("M3 Limited", False, [2015, 2016])),
+        tundra = Truck(
+            toyota, AutoModel("Tundra", False, [1987, 1988]),
+            )
         
+        g = Garage()
+        for v in [f150, civic, m3, tundra]:
+            g.add_vehicle(v)
+        
+        # Before sort — order should be insertion order
+        before = g.vehicles
+        assert before[0].model.name == "F150"
+        assert before[1].model.name == "Civic"
+        assert before[2].model.name == "M3 Limited"
+        assert before[3].model.name == "Tundra"
+
+        g.sort_by_release_year()
+        after = g.vehicles
+        assert after[0].model.name == "Tundra"
+        assert after[1].model.name == "Civic"
+        assert after[2].model.name == "M3 Limited"
+        assert after[3].model.name == "F150"
+
+        # Verify types survived polymorphism
+        assert isinstance(after[0], Truck)
+        assert isinstance(after[1], Sedan)
+        assert isinstance(after[2], Sedan)
+        assert isinstance(after[3], Truck)
+
+        # Verify dually status
+        assert after[0].is_dually is True
+        assert after[3].is_dually is False
+
+        # Verify wheel counts
+        assert after[0].number_of_wheels() == 6
+        assert after[1].number_of_wheels() == 4
+        assert after[3].number_of_wheels() == 4
+
+        # Verify how_far_with
+        assert after[1].how_far_with(10) == pytest.approx(280.0)

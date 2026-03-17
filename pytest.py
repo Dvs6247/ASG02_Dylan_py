@@ -242,3 +242,122 @@ class TestVehicleComparison:
         assert result[1].release_year == 2015
         assert result[2].release_year == 2020
 
+class TestGarage:
+#Created the full test class for the Garage
+    @pytest.fixture
+    def full_garage(self):
+        g = Garage()
+        g.add_vehicle(
+            Truck(
+                Manufacturer("Ford", "USA"),
+                AutoModel("F150", True, [2020, 2021, 2022]),
+                20.0,
+                )
+                )
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("Honda", "Japan"),
+                AutoModel("Civic", False, [1996, 1997, 1998]),
+                28.0,
+                )
+                )
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("BMW", "Germany"),
+                AutoModel("M3 Limited", False, [2015, 2016, 2017]),
+                30.0,
+                )
+                )
+        g.add_vehicle(
+            Truck(
+                Manufacturer("Toyota", "Japan"),
+                AutoModel("Tundra", False, [1987, 1988]),
+                30.0,
+                is_dually=True,
+                )
+                )
+        return g
+    def test_add_vehicle(self):
+        g = Garage()
+        assert len(g.vehicles) == 0
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("A", "B"),
+                AutoModel("C", True, [2020]),
+                25.0,
+                )
+                )
+        assert len(g.vehicles) == 1
+    def test_vehicles_returns_copy(self):
+        """Mutating the returned list should NOT affect the garage."""
+        g = Garage()
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("A", "B"),
+                AutoModel("C", True, [2020]),
+                25.0,
+                )
+                )
+        external = g.vehicles
+        external.clear()
+        assert len(g.vehicles) == 1
+    
+    def test_empty_garage(self):
+        g = Garage()
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("A", "B"),
+                AutoModel("C", True, [2020]),
+                25.0,
+                )
+                )
+        g.empty_garage()
+        assert len(g.vehicles) == 0
+    def test_empty_garage_does_not_set_none(self):
+        """
+        After emptying, add_vehicle should still work (list)
+        """
+        g = Garage()
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("A", "B"),
+                AutoModel("C", True, [2020]),
+                25.0,
+                )
+                )
+        g.empty_garage()
+        g.add_vehicle(
+            Sedan(
+                Manufacturer("D", "E"),
+                AutoModel("F", False, [2021]),
+                30.0,
+                )
+                )
+        assert len(g.vehicles) == 1
+
+    def test_sort_by_release_year(self, full_garage):
+        full_garage.sort_by_release_year()
+        vehicles = full_garage.vehicles
+        years = [v.release_year for v in vehicles]
+        assert years == sorted(years)
+    def test_sort_order_specific(self, full_garage):
+        full_garage.sort_by_release_year()
+        vehicles = full_garage.vehicles
+        assert vehicles[0].release_year == 1987
+        assert vehicles[1].release_year == 1996
+        assert vehicles[2].release_year == 2015
+        assert vehicles[3].release_year == 2020
+
+    def test_str_contains_all_vehicles(self, full_garage):
+        s = str(full_garage)
+        assert "F150" in s
+        assert "Civic" in s
+        assert "M3 Limited" in s
+        assert "Tundra" in s
+
+    def test_str_vehicles_on_separate_lines(self, full_garage)
+        s = str(full_garage)
+        lines = s.strip().split("\n")
+        assert len(lines) == 4
+
+        
